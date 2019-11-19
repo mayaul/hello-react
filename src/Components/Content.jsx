@@ -5,8 +5,8 @@ class Content extends Component {
         console.log("content render");
         return (
             <article>
-                <h2>React App</h2>
-                study!!!
+                <h2>{this.props.title}</h2>
+                {this.props.sub}
             </article>
         );
 	}
