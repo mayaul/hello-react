@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Content from './Components/Content'
 import Subject from './Components/Subject'
 import Navigation from './Components/Navigation'
+import Control from './Components/Control'
 
 class App extends Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class App extends Component {
       <div className="App">
         <Subject title={this.state.subject.title} sub={this.state.subject.sub} onChangePage={function() { this.setState({mode:'read'}) }.bind(this)}></Subject>
         <Navigation data={this.state.contents} onChangePage={function(id) { this.setState({selected_content_id:Number(id)}) }.bind(this)}></Navigation>
+        <Control onChangeMode={function(mode) { this.setState({mode: mode})}.bind(this)}></Control>
         <Content title={_title} sub={_desc}></Content>
       </div>
     );
