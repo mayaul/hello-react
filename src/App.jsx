@@ -12,7 +12,7 @@ class App extends Component {
     // UI 영향을 주지 않는 값, 이 값이 state에 있다면 변경이 되었을때 불필요한 렌더링이 발생 할 수 있다.
     this.max_content_id = 3;
     this.state = {
-      mode:'create',
+      mode:'welcome',
       selected_content_id: 2,
       subject:{title:'subject', sub:'subject message'},
       welcome:{title:'welcome', sub:'welcome message'},
@@ -45,7 +45,7 @@ class App extends Component {
       _desc = this.state.welcome.sub;
       _article = <ReadContent title={_title} sub={_desc}></ReadContent>
     } else if (this.state.mode === 'read') {
-      _article = <ReadContent title={_content._title} sub={_content._desc}></ReadContent>
+      _article = <ReadContent title={_content.title} sub={_content.desc}></ReadContent>
     } else if (this.state.mode === 'create') {
       _article = <CreateContent onSubmit={function (_title, _desc) {
         this.max_content_id = this.max_content_id + 1;
@@ -67,8 +67,32 @@ class App extends Component {
     return (
       <div className="App">
         <Subject title={this.state.subject.title} sub={this.state.subject.sub} onChangePage={function() { this.setState({mode:'read'}) }.bind(this)}></Subject>
-        <Navigation data={this.state.contents} onChangePage={function(id) { this.setState({selected_content_id:Number(id)}) }.bind(this)}></Navigation>
-        <Control onChangeMode={function(mode) { this.setState({mode: mode})}.bind(this)}></Control>
+        <Navigation data={this.state.contents} onChangePage={function(_id) { this.setState({selected_content_id:Number(_id)}) }.bind(this)}></Navigation>
+        <Control onChangeMode={function(_mode) {
+
+          if (_mode === 'delete') {
+            if (window.confirm("really?")) {
+              var _contents = Array.from(this.state.contents)
+              var i = 0;
+
+              while(i < _contents.length) {
+
+                if (_contents[i].id === this.state.selected_content_id) {
+                  _contents.splice(i, 1);
+                  break;
+                }
+                i++;
+              }
+
+              this.setState({
+                mode: 'welcome',
+                contents: _contents
+              })
+            }
+          } else {
+            this.setState({mode: _mode})
+          }
+        }.bind(this)}></Control>
         {this.getContent()}
       </div>
     );
